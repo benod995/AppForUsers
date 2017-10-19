@@ -1,0 +1,138 @@
+{
+  "project_info": {
+    "project_number": "968345670861",
+    "firebase_url": "https://alzheimers-project.firebaseio.com",
+    "project_id": "alzheimers-project",
+    "storage_bucket": "alzheimers-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968345670861:android:7de12b85987a9109",
+        "android_client_info": {
+          "package_name": "com.AlzheimersProject.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968345670861-008q5uo0d6hc52178dn0oh96810s6dvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6mlmjR0U4NsSxVCHmIS70voCn0tIiprs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968345670861:android:e31e0d4bee0e6973",
+        "android_client_info": {
+          "package_name": "com.example.chris.getlocation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968345670861-l3kviqo5nh6n8euvsao2tnruoqqhkbm2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chris.getlocation",
+            "certificate_hash": "cf95867bdc7dcfe2796dfc7f72ba555b4229f2ef"
+          }
+        },
+        {
+          "client_id": "968345670861-008q5uo0d6hc52178dn0oh96810s6dvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6mlmjR0U4NsSxVCHmIS70voCn0tIiprs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968345670861-008q5uo0d6hc52178dn0oh96810s6dvm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968345670861:android:e69fdf56c01b6d1a",
+        "android_client_info": {
+          "package_name": "com.example.benodonnell.a3rdyearproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968345670861-fhoul92cbpft1fdpcr6j4ig9ot0p6u7c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.benodonnell.a3rdyearproject",
+            "certificate_hash": "dc1d203f552ee6d67b5d78e6bec76fd8c0bbb814"
+          }
+        },
+        {
+          "client_id": "968345670861-nanu6mom9k651fsv530joq5v2qh7h6qf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.benodonnell.a3rdyearproject",
+            "certificate_hash": "cf95867bdc7dcfe2796dfc7f72ba555b4229f2ef"
+          }
+        },
+        {
+          "client_id": "968345670861-008q5uo0d6hc52178dn0oh96810s6dvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6mlmjR0U4NsSxVCHmIS70voCn0tIiprs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968345670861-008q5uo0d6hc52178dn0oh96810s6dvm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
