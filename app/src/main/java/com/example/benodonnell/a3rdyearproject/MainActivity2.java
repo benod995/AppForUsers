@@ -1,7 +1,12 @@
 package com.example.benodonnell.a3rdyearproject;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.SyncStateContract.Constants;
 import android.support.annotation.NonNull;
@@ -16,11 +21,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +45,7 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
     private FirebaseAuth.AuthStateListener fireBaseAuthListner;
     private GoogleMap mMap;
     private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     public void onStart() {
         super.onStart();
@@ -60,19 +69,13 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        /**
-         * Getting which user is currently logged in
-         */
-        firebaseAuth = FirebaseAuth.getInstance();
-        mProgress = new ProgressDialog(this);
-        fireBaseAuthListner = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            }
-        };
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,43 +90,96 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        /**
+         * Getting which user is currently logged in
+         */
+        firebaseAuth = FirebaseAuth.getInstance();
+        mProgress = new ProgressDialog(this);
+        fireBaseAuthListner = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            }
+        };
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         /*
         *  Getting data from fire base
         *
         */
+
         database = FirebaseDatabase.getInstance();
         //Getting the a reference to the data we need
-        DatabaseReference reference = database.getReference("Patients/Patient1/Location");
-        //Adding the event listner
+        reference = database.getReference("Patients/Patient1");
+        //Adding the event listener
+
         //The map will update  when the data changes
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Getting the latitude
-                DataSnapshot latSnapshot = dataSnapshot.child("lat");
+
+                //First get the location reference
+                DataSnapshot locationSnap = dataSnapshot.child("Location");
+
+                DataSnapshot latSnapshot = locationSnap.child("lat");
                 double lat = latSnapshot.getValue(Double.class);
 
                 //Getting the longitde
-                DataSnapshot lngSnapshot = dataSnapshot.child("lng");
+                DataSnapshot lngSnapshot = locationSnap.child("lng");
                 double lng = lngSnapshot.getValue(Double.class);
+
                 //Making the marker for the map
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(lat,lng));
+
                 //Clearing the old marker
                 mMap.clear();
                 //adding the current marker
                 mMap.addMarker(markerOptions);
                 //Postioning the view over the marker
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
-            }
 
+                //Setting the geofence as with cordinates in firebase
+                DataSnapshot x = dataSnapshot.child("GeoFence");
+
+                double geoFenceLat = x.child("lat").getValue(Double.class);
+                double geoFenceLng = x.child("lng").getValue(Double.class);
+                int geoFenceRadius = x.child("radius").getValue(Integer.class);
+
+                //Adding the circle to the map
+               Circle mCircle = mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(geoFenceLat, geoFenceLng))
+                        .radius(geoFenceRadius)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.TRANSPARENT));
+
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
+    /*    mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+            @Override
+            public void onMyLocationChange(Location location) {
+                float[] distance = new float[2];
+
+                Location.distanceBetween( location.getLatitude(), location.getLongitude(),
+                        mCircle.getCenter().latitude, mCircle.getCenter().longitude, distance);
+
+                if( distance[0] > mCircle.getRadius() ){
+                    Toast.makeText(getBaseContext(), "Outside, distance from center: " + distance[0] + " radius: " + mCircle.getRadius(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getBaseContext(), "Inside, distance from center: " + distance[0] + " radius: " + mCircle.getRadius() , Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+*/
+
     }
 
     @Override
@@ -170,7 +226,10 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -185,7 +244,8 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-            setGeoFence();
+            Intent i = new Intent(MainActivity2.this, SetGeofence.class);
+            startActivity(i);
         } else if (id == R.id.nav_send) {
 
             if (fireBaseAuthListner != null) {
@@ -206,23 +266,4 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-    private void setGeoFence(){
-        //Radius in meteres
-        int radius = 200;
-        double lat = 51.871151;
-        double lng = 8.4918232;
-
-        //Saving data to fireBase
-
-        DatabaseReference dbRef = database.getReference("Patients/Patient1/GeoFence");
-        dbRef.child("lat").setValue(lat);
-        dbRef.child("lng").setValue(lng);
-        dbRef.child("radius").setValue(radius);
-
-
-
-
-
-
-    }
 }
