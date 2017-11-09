@@ -66,10 +66,12 @@ public class Register extends Activity {
         EditText emailInput = (EditText) findViewById(R.id.emailIn);
         EditText passwordInput = (EditText) findViewById(R.id.passwordIn);
         EditText nameInput = (EditText) findViewById(R.id.nameIn);
+        EditText patientInput = (EditText) findViewById(R.id.patientID);
 
-       final String name = nameInput.getText().toString().trim();
+        final String name = nameInput.getText().toString().trim();
         final String email = emailInput.getText().toString().trim();
         final String password = passwordInput.getText().toString();
+        final String patient = patientInput.getText().toString().trim(); // TODO
 
         if (name.length() == 0){
             Toast.makeText(getApplicationContext(), "Please Enter a Name", Toast.LENGTH_SHORT).show();
@@ -77,8 +79,6 @@ public class Register extends Activity {
             if (email.length() == 0){
                 Toast.makeText(getApplicationContext(), "Please Enter an Email", Toast.LENGTH_SHORT).show();
             }else{
-
-
 
                 if (email.contains("@") == false){
                     Toast.makeText(getApplicationContext(), "Please Enter a Valid Email", Toast.LENGTH_SHORT).show();

@@ -16,4 +16,5 @@
     <string name="latitude">Latitude</string>
     <string name="lonitude">Lonitude</string>
     <string name="set_geofence">Set Geofence</string>
+    <string name="patient_id">Patient ID</string>
 </resources>

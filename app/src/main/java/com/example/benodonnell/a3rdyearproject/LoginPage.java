@@ -40,13 +40,11 @@ public class LoginPage extends AppCompatActivity {
                     startActivity(new Intent(LoginPage.this, MapsPage.class));
                 }else{
                     mProgress.dismiss();
-
                 }
             }
         };
         login();
     }
-
 
     public void login() {
         Button btn;
@@ -60,22 +58,43 @@ public class LoginPage extends AppCompatActivity {
                 EditText email = (EditText) findViewById(R.id.editText);
                 EditText password = (EditText) findViewById(R.id.editText2);
 
-                String emailtext = String.valueOf(email.getText()).trim();
-                String passwordsText = String.valueOf(password.getText()).trim();
+                final String emailText = email.getText().toString().trim();
+                final String passwordsText = password.getText().toString().trim();
 
-                //Logging in the user
-                firebaseAuth.signInWithEmailAndPassword(emailtext, passwordsText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(Task<AuthResult> task) {
-                        if (task.isSuccessful() == false){
 
+                if (emailText.length() >1  || passwordsText.length() >1) {
+                    //Logging in the user
+                    firebaseAuth.signInWithEmailAndPassword(emailText, passwordsText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(Task<AuthResult> task) {
+                                if (task.isSuccessful() == false) {
+                                    AlertDialog dialog = new AlertDialog.Builder(LoginPage.this).create();
+                                    dialog.setMessage("Email or password does not exist\n Please Try Again");
+                                    dialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Try Again\n",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    mProgress.dismiss();
+                                                }
+
+                                            });
+                                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Register\n",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                        Intent i = new Intent(LoginPage.this, Register.class);
+                                                        startActivity(i);
+
+                                                }
+
+                                            });
+
+                                    dialog.show();
+                                }
                         }
-
-                    }
-
-
-
-                });
+                    });
+                } else {
+                    mProgress.dismiss();
+                }
             }
         });
     }
