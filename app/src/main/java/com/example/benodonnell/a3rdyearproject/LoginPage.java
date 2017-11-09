@@ -1,25 +1,24 @@
 package com.example.benodonnell.a3rdyearproject;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+        import android.app.AlertDialog;
+        import android.app.ProgressDialog;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.support.annotation.NonNull;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.EditText;
 
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseUser;
+        import com.google.android.gms.maps.SupportMapFragment;
+        import com.google.android.gms.tasks.OnCompleteListener;
+        import com.google.android.gms.tasks.Task;
+        import com.google.firebase.auth.AuthResult;
+        import com.google.firebase.auth.FirebaseAuth;
 
 
-public class MainActivity extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity {
     private ProgressDialog mProgress;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener fireBaseAuthListner;
@@ -36,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
         fireBaseAuthListner = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
                 if (firebaseAuth.getCurrentUser() != null) {
                     mProgress.dismiss();
-                    startActivity(new Intent(MainActivity.this, MainActivity2.class));
+                    startActivity(new Intent(LoginPage.this, MapsPage.class));
+                }else{
+                    mProgress.dismiss();
+
                 }
             }
         };
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public User login() {
+    public void login() {
         Button btn;
         btn = (Button) findViewById(R.id.bLogin);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -62,36 +63,26 @@ public class MainActivity extends AppCompatActivity {
                 String emailtext = String.valueOf(email.getText()).trim();
                 String passwordsText = String.valueOf(password.getText()).trim();
 
-                boolean isEmail;
-                //Seeing if it is a valid email
-                if (emailtext.contains("@"))
-                    isEmail = true;
-                else {
-                    isEmail = false;
-                    Toast.makeText(getApplicationContext(), "Please Enter A Valid Email", Toast.LENGTH_SHORT).show();
-                }
+                //Logging in the user
+                firebaseAuth.signInWithEmailAndPassword(emailtext, passwordsText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(Task<AuthResult> task) {
+                        if (task.isSuccessful() == false){
 
-                if (emailtext.length() < 1) {
-                    Toast.makeText(getApplicationContext(), "Enter email", Toast.LENGTH_SHORT).show();
-                } else if (passwordsText.length() < 1) {
-                    Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    firebaseAuth.signInWithEmailAndPassword(emailtext, passwordsText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Toast.makeText(getApplicationContext(), "Logged In", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }
+
+                    }
+
+
+
+                });
             }
         });
-        return null;
     }
 
     public void onButtonClick(View v) {
         if (v.getId() == R.id.bRegister) {
-            Intent i = new Intent(MainActivity.this, Register.class);
+            Intent i = new Intent(LoginPage.this, Register.class);
             startActivity(i);
         }
     }

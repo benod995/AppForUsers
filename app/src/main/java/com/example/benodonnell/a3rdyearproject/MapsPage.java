@@ -1,14 +1,9 @@
 package com.example.benodonnell.a3rdyearproject;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.SyncStateContract.Constants;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -38,7 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+public class MapsPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private ProgressDialog mProgress;
     private FirebaseAuth firebaseAuth;
@@ -148,13 +143,17 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
                 int geoFenceRadius = x.child("radius").getValue(Integer.class);
 
                 //Adding the circle to the map
-               Circle mCircle = mMap.addCircle(new CircleOptions()
+                Circle mCircle = mMap.addCircle(new CircleOptions()
                         .center(new LatLng(geoFenceLat, geoFenceLng))
                         .radius(geoFenceRadius)
                         .strokeColor(Color.RED)
                         .fillColor(Color.TRANSPARENT));
 
+                double  dist = (int) calcualteDistance(lat, lng, geoFenceLat, geoFenceLng);
+                String distFromRadius = String.valueOf(dist);
+                Toast.makeText(MapsPage.this, distFromRadius , Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -244,7 +243,7 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-            Intent i = new Intent(MainActivity2.this, SetGeofence.class);
+            Intent i = new Intent(MapsPage.this, SetGeofence.class);
             startActivity(i);
         } else if (id == R.id.nav_send) {
 
@@ -254,7 +253,7 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
                 mProgress.setMessage("Signing out......");
                 mProgress.show();
                 firebaseAuth.signOut();
-                Intent i = new Intent(MainActivity2.this, MainActivity.class);
+                Intent i = new Intent(MapsPage.this, LoginPage.class);
                 startActivity(i);
             }
 
@@ -266,4 +265,29 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+    /**
+     * Calcustes the distance beween to points on a map and returns distance as a double
+     * @param latA Lattitude of the point A
+     * @param lonA Longitude of point A
+     * @param latB Latitude of point B
+     * @param lonB Longitiude of point B
+     *
+     * @return The distance between the two points
+     */
+    private double calcualteDistance(double latA, double lonA, double latB, double lonB ){
+        double res = 0;
+        final int RADIUS_OF_EARTH = 6371;
+        // changing to radians
+        double dLat = Math.toRadians(latB - latA);
+        double dLon = Math.toRadians(lonB - lonA);
+
+        latA = Math.toRadians(latA);
+        latB = Math.toRadians(latB);
+        // equation itslef
+        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(latA) * Math.cos(latB);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        res =  RADIUS_OF_EARTH * c;
+
+        return res;
+    }
 }

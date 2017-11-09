@@ -53,7 +53,8 @@ public class Register extends Activity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 if (firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(Register.this, Welcome.class));
+                    startActivity(new Intent(Register.this, MapsPage
+                            .class));
                 }
             }
         };
