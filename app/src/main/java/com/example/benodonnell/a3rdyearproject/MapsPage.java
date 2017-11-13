@@ -239,7 +239,8 @@ public class MapsPage extends AppCompatActivity implements NavigationView.OnNavi
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
-
+            Intent i = new Intent(MapsPage.this, Game.class);
+            startActivity(i);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

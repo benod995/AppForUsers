@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="Display" type="id">register_page</item>
+    <item name="b1" type="id">B1</item>
+    <item name="b2" type="id">B2</item>
+    <item name="b3" type="id">B3</item>
+    <item name="b4" type="id">B4</item>
+    <item name="b5" type="id">B5</item>
+    <item name="b6" type="id">B6</item>
+    <item name="b7" type="id">B7</item>
+    <item name="b8" type="id">B8</item>
+    <item name="b9" type="id">B9</item>
 </resources>
